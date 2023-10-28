@@ -24,6 +24,7 @@ jobs:
 
       - run: |
           npm ci
+          mkdir dist
           npm pack sucrase@3.34.0
           tar xzf sucrase-*.tgz
           rm sucrase-*.tgz
@@ -35,9 +36,9 @@ jobs:
             -p '@rollup/plugin-node-resolve' \
             -p '@rollup/plugin-commonjs' \
             -p '@rollup/plugin-terser' \
-            -o sucrase.browser.js
+            -o dist/sucrase.browser.js
 
       - uses: actions/upload-artifact@v3
         with:
-          path: sucrase.browser.js
+          path: dist/sucrase.browser.js
           retention-days: 10
