@@ -1,0 +1,43 @@
+name: Build sucrase
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: |
+          npm ci
+          npm pack sucrase@3.34.0
+          tar xzf sucrase-*.tgz
+          rm sucrase-*.tgz
+
+      - run: |
+          npx rollup -i ./package/dist/index.js \
+            -f iife \
+            -n sucrase \
+            -p '@rollup/plugin-node-resolve' \
+            -p '@rollup/plugin-commonjs' \
+            -p '@rollup/plugin-terser' \
+            -o sucrase.browser.js
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: sucrase.browser.js
+          retention-days: 10
