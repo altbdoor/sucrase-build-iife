@@ -23,7 +23,7 @@ jobs:
         with:
           repository: 'alangpierce/sucrase'
           ref: main
-          fetch-depth: 20
+          fetch-depth: 50
 
       - uses: actions/setup-node@v4
         with:
@@ -78,12 +78,31 @@ jobs:
           npx rollup -i ./package/dist/index.js \
             -f iife \
             -n sucrase \
+            --banner "/* sucrase v$VERSION */" \
             -p '@rollup/plugin-node-resolve' \
             -p '@rollup/plugin-commonjs' \
             -p '@rollup/plugin-terser' \
             -o dist/sucrase.browser.js
 
+      - name: Add version info
+        working-directory: dist
+        run: |
+          echo "v$VERSION" > VERSION
+          mv sucrase.browser.js sucrase.tmp.js
+          echo "/* sucrase v$VERSION */" > sucrase.browser.js
+          cat sucrase.tmp.js >> sucrase.browser.js
+          rm sucrase.tmp.js
+
       - uses: actions/upload-artifact@v3
         with:
-          path: dist/sucrase.browser.js
+          path: dist/
           retention-days: 30
+
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: v3
+          publish_dir: dist
+          commit_message: build v${{ env.VERSION }}
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
