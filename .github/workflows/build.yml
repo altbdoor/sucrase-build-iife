@@ -16,7 +16,7 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  get-versions:
+  get-sucrase-deps:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,13 +43,14 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
+          name: versions
           path: versions.txt
           retention-days: 30
 
   build:
     runs-on: ubuntu-latest
     needs:
-      - get-versions
+      - get-sucrase-deps
     steps:
       - uses: actions/checkout@v4
         with:
@@ -59,14 +60,22 @@ jobs:
         with:
           node-version: 18
 
-      - run: |
+      - uses: actions/download-artifact@v3
+        with:
+          name: versions
+          path: versions.txt
+
+      - name: Get sucrase build from NPM
+        run: |
           npm ci
+          npm i $(cat versions.txt)
           mkdir dist
           npm pack "sucrase@$VERSION"
           tar xzf sucrase-*.tgz
           rm sucrase-*.tgz
 
-      - run: |
+      - name: Rollup into IIFE
+        run: |
           npx rollup -i ./package/dist/index.js \
             -f iife \
             -n sucrase \
@@ -78,4 +87,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           path: dist/sucrase.browser.js
-          retention-days: 10
+          retention-days: 30
