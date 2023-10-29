@@ -63,7 +63,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: versions
-          path: versions.txt
 
       - name: Get sucrase build from NPM
         run: |
