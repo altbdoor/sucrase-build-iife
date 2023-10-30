@@ -4,7 +4,8 @@ name: Build sucrase
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: [ "master" ]
+    branches: ["master"]
+    paths-ignore: ["docs/**"]
   # pull_request:
   #   branches: [ "master" ]
 
@@ -21,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: 'alangpierce/sucrase'
+          repository: "alangpierce/sucrase"
           ref: main
           fetch-depth: 50
 
@@ -104,5 +105,5 @@ jobs:
           publish_branch: v3
           publish_dir: dist
           commit_message: build v${{ env.VERSION }}
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"

@@ -10,7 +10,6 @@ to build sucrase with Rollup.
 
 To note, I mostly have zero idea how the build works, mostly cobbled together randomly.
 
-
 ## Usage
 
 I'm primarily loading sucrase as a [Service worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API),
@@ -18,7 +17,9 @@ so as a short example:
 
 ```js
 // sw.js
-self.importScripts("https://cdn.jsdelivr.net/gh/altbdoor/sucrase-build-iife@v3.34.0/sucrase.browser.js");
+self.importScripts(
+  "https://cdn.jsdelivr.net/gh/altbdoor/sucrase-build-iife@v3.34.0/sucrase.browser.js"
+);
 
 const { transform } = sucrase;
 
@@ -33,7 +34,7 @@ self.addEventListener("fetch", (event) => {
         }).code;
 
         return new Response(code, { headers });
-      }),
+      })
   );
 });
 ```

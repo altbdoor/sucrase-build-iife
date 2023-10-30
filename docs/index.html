@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sample React app</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.css"
+    />
+
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18.2.0",
+          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+          "react-router": "https://esm.sh/*react-router@6.17.0",
+          "react-router-dom": "https://esm.sh/*react-router-dom@6.17.0",
+          "@remix-run/router": "https://esm.sh/@remix-run/router@1.10.0"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <div style="text-align: center; padding: 2rem">Loading...</div>
+    </div>
+
+    <script>
+      // https://medium.com/disdj/react-jsx-es-module-imports-dynamic-too-in-browser-without-webpack-9cf39520f20f
+      (async () => {
+        try {
+          const registration = await navigator.serviceWorker.register(
+            `./sw.js?v=${Date.now()}`
+          );
+          await navigator.serviceWorker.ready;
+
+          const launch = async () => import("./src/jsx/index");
+
+          window.addEventListener("beforeunload", () => {
+            registration.unregister();
+          });
+
+          // https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#clientsclaim
+          if (navigator.serviceWorker.controller) {
+            await launch();
+          } else {
+            navigator.serviceWorker.addEventListener(
+              "controllerchange",
+              launch
+            );
+          }
+        } catch (error) {
+          console.error("Service worker registration failed", error);
+        }
+      })();
+    </script>
+  </body>
+</html>
