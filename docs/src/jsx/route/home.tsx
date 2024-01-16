@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom";
-import { Lorem } from "./lorem";
+import { FC } from "react";
 
-export const Component = () => (
+export const HomeComponent: FC = () => (
   <>
     <h1>Home page</h1>
     <p>
@@ -23,7 +22,7 @@ export const Component = () => (
         <a href="https://react.dev/">React 18</a>
       </li>
       <li>
-        <a href="https://reactrouter.com/en/main">React Router 6</a>
+        <a href="https://tanstack.com/router/v1">TanStack Router 1</a>
       </li>
       <li>
         <a href="https://getbootstrap.com/2.3.2/">Bootstrap 2</a> (just for fun)
@@ -32,10 +31,9 @@ export const Component = () => (
         Modules loaded via <a href="https://esm.sh/">esm.sh</a>
       </li>
     </ol>
-    <Lorem></Lorem>
-    <hr />
-    <Link to={"/about"} className="btn btn-info">
+
+    <a href="#/about" className="btn btn-info">
       Click to check the about page
-    </Link>
+    </a>
   </>
 );

@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Lorem } from "./lorem";
+import { useState } from "react";
 
-export const Component = () => {
+export default function AboutComponent() {
   const [counter, setCounter] = useState(10);
 
   return (
@@ -26,11 +24,10 @@ export const Component = () => {
           Decrease counter
         </button>
       </p>
-      <Lorem count={2}></Lorem>
-      <hr />
-      <Link to={"/"} className="btn btn-info">
+
+      <a href="#/" className="btn btn-info">
         Click to check the home page
-      </Link>
+      </a>
     </>
   );
-};
+}
