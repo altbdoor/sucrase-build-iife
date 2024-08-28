@@ -2,10 +2,13 @@ self.importScripts(
   "https://cdn.jsdelivr.net/gh/altbdoor/sucrase-build-iife@v3.34.0/sucrase.browser.js",
 );
 
+const searchParams = new URLSearchParams(self.location.search);
+const isDebug = searchParams.has("debug");
+
 const { transform } = sucrase;
 const headers = new Headers({
   "Content-Type": "application/javascript",
-  "Cache-Control": "max-age=300",
+  "Cache-Control": `max-age=${isDebug ? 0 : 300}`,
 });
 
 // this is needed to activate the worker immediately without reload
@@ -30,10 +33,12 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  console.log(`Handling ${url.toString()}`);
+  if (isDebug) {
+    console.log(`Handling ${url.toString()}`);
+  }
 
   event.respondWith(
-    fetch(url.toString(), { cache: "default" })
+    fetch(url.toString(), { cache: isDebug ? "no-cache" : "default" })
       .then((res) => res.text())
       .then((body) => {
         const code = transform(body, {
@@ -42,9 +47,11 @@ self.addEventListener("fetch", (event) => {
           production: true,
         }).code;
 
-        console.groupCollapsed(`Processed ${url.toString()}`);
-        console.log(code);
-        console.groupEnd();
+        if (isDebug) {
+          console.groupCollapsed(`Processed ${url.toString()}`);
+          console.log(code);
+          console.groupEnd();
+        }
 
         return new Response(code, { headers });
       }),
