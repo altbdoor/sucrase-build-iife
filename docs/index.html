@@ -17,10 +17,10 @@
     <script type="importmap">
       {
         "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react/jsx-runtime": "https://esm.sh/*react@18.2.0/jsx-runtime",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "@tanstack/react-router": "https://esm.sh/@tanstack/react-router@1.4.6?external=react"
+          "react": "https://esm.sh/react@18.3.1",
+          "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+          "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+          "@tanstack/react-router": "https://esm.sh/@tanstack/react-router@1.114.34?external=react"
         }
       }
     </script>
@@ -35,7 +35,7 @@
       (async () => {
         try {
           const registration = await navigator.serviceWorker.register(
-            `./sw.js?v=${Date.now()}`,
+            `./sw.js?debug=&v=${Date.now()}`,
           );
           await navigator.serviceWorker.ready;
 

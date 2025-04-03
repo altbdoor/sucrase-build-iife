@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@tanstack/react-router": "^1.4.6",
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18"
+    "@tanstack/react-router": "^1.114.34",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6"
   }
 }
