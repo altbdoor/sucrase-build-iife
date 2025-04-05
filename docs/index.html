@@ -19,8 +19,9 @@
         "imports": {
           "react": "https://esm.sh/react@18.3.1",
           "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+          "react-dom": "https://esm.sh/react-dom@18.3.1",
           "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-          "@tanstack/react-router": "https://esm.sh/@tanstack/react-router@1.114.34?external=react"
+          "@tanstack/react-router": "https://esm.sh/@tanstack/react-router@1.114.34?external=react,react-dom"
         }
       }
     </script>
@@ -39,7 +40,16 @@
           );
           await navigator.serviceWorker.ready;
 
-          const launch = async () => import("./src/jsx/index");
+          async function launch() {
+            // preload react code
+            await Promise.allSettled([
+              await import("react"),
+              await import("react/jsx-runtime"),
+              await import("react-dom"),
+              await import("react-dom/client"),
+            ]);
+            await import("./src/jsx/index");
+          }
 
           window.addEventListener("beforeunload", () => {
             registration.unregister();

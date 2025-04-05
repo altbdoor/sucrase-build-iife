@@ -1,13 +1,13 @@
 import {
   Outlet,
-  RootRoute,
-  Route,
+  createRootRoute,
+  createRoute,
   lazyRouteComponent,
 } from "@tanstack/react-router";
 import { BaseLayout } from "../layout";
 import { HomeComponent } from "./home";
 
-const rootRoute = new RootRoute({
+const rootRoute = createRootRoute({
   component: () => (
     <BaseLayout>
       <Outlet />
@@ -15,12 +15,12 @@ const rootRoute = new RootRoute({
   ),
 });
 
-export const homeRoute = new Route({
+export const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: HomeComponent,
 });
-export const aboutRoute = new Route({
+export const aboutRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/about",
   component: lazyRouteComponent(() => import("./about")),
